@@ -28,7 +28,7 @@ android {
     signingConfigs {
         create("release") {
             // CI: use env vars; Local: use keystore.properties
-            storeFile = file((keystoreProperties["storeFile"] as? String) ?: System.getenv("KEYSTORE_FILE") ?: "release.jks")
+            storeFile = rootProject.file((keystoreProperties["storeFile"] as? String) ?: System.getenv("KEYSTORE_FILE") ?: "release.jks")
             storePassword = (keystoreProperties["storePassword"] as? String) ?: System.getenv("KEYSTORE_PASSWORD") ?: ""
             keyAlias = (keystoreProperties["keyAlias"] as? String) ?: System.getenv("KEY_ALIAS") ?: ""
             keyPassword = (keystoreProperties["keyPassword"] as? String) ?: System.getenv("KEY_PASSWORD") ?: ""
