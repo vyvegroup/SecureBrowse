@@ -44,10 +44,21 @@ jobs:
           echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
           echo "tag=v${VERSION}-${TIMESTAMP}" >> $GITHUB_OUTPUT
 
-      - name: Rename APK
+      - name: Find and Rename APK
         run: |
-          mv app/build/outputs/apk/release/app-release.apk \
-            app/build/outputs/apk/release/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk
+          echo "=== Listing APK outputs ==="
+          find app/build/outputs -name "*.apk" -type f 2>/dev/null || echo "No APK in outputs"
+          APK_PATH=$(find app/build -name "*.apk" -type f | head -1)
+          if [ -z "$APK_PATH" ]; then
+            echo "ERROR: No APK found!"
+            find app/build -type f -name "*.apk" 2>/dev/null
+            ls -la app/build/outputs/apk/release/ 2>/dev/null || echo "release dir not found"
+            exit 1
+          fi
+          echo "Found APK at: $APK_PATH"
+          mkdir -p /tmp/apk-output
+          cp "$APK_PATH" "/tmp/apk-output/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk"
+          echo "APK_FILE=/tmp/apk-output/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk" >> $GITHUB_ENV
 
       - name: Create Release and Upload APK
         uses: softprops/action-gh-release@v2
@@ -70,8 +81,7 @@ jobs:
             2. Enable "Install from unknown sources" on your device
             3. Install the APK
 
-          files: |
-            app/build/outputs/apk/release/SecureBrowse-*.apk
+          files: ${{ env.APK_FILE }}
           draft: false
           prerelease: false
         env:
