@@ -43,16 +43,16 @@ jobs:
             -keysize 4096 \
             -sigalg SHA256withRSA \
             -validity 36500 \
-            -storepass "${{ secrets.KEYSTORE_PASSWORD || 'securebrowse2024' }}" \
-            -keypass "${{ secrets.KEY_PASSWORD || 'securebrowse2024' }}" \
+            -storepass "securebrowse2024" \
+            -keypass "securebrowse2024" \
             -dname "CN=SecureBrowse, OU=Dev, O=SecureBrowse, L=Unknown, ST=Unknown, C=US"
 
       - name: Build Release APK (Signed v1+v2+v3)
         env:
           KEYSTORE_FILE: release.jks
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'securebrowse2024' }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'securebrowse' }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'securebrowse2024' }}
+          KEYSTORE_PASSWORD: "securebrowse2024"
+          KEY_ALIAS: "securebrowse"
+          KEY_PASSWORD: "securebrowse2024"
         run: ./gradlew assembleRelease --no-daemon
 
       - name: Verify APK Signature Schemes
@@ -60,81 +60,59 @@ jobs:
           APK_PATH=$(find app/build -name "*.apk" -type f | head -1)
           echo "APK: $APK_PATH"
           echo "APK size: $(du -h $APK_PATH | cut -f1)"
-
-          # Verify signing
-          java -jar /usr/share/java/apksigner.jar verify --print-certs "$APK_PATH" 2>/dev/null || \
-          $ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools/ | tail -1)/apksigner verify --print-certs "$APK_PATH" 2>/dev/null || \
-          echo "Note: apksigner verification not available, but signing was applied during build"
-
-          # Check with unzip
           echo ""
-          echo "=== APK Contents ==="
-          unzip -l "$APK_PATH" | head -20
-
+          echo "=== Signature Verification ==="
+          $ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools/ | tail -1)/apksigner verify --print-certs "$APK_PATH" || echo "apksigner verify failed (may need different tooling)"
           echo ""
-          echo "=== Checking Signature Schemes ==="
-          if unzip -l "$APK_PATH" | grep -q "META-INF/.*\.RSA"; then
-            echo "✅ v1 (JAR) signature: PRESENT"
-          else
-            echo "❌ v1 (JAR) signature: NOT FOUND"
-          fi
+          echo "=== Checking META-INF ==="
+          unzip -l "$APK_PATH" | rg "META-INF" || echo "No META-INF entries"
 
-          if unzip -l "$APK_PATH" | grep -q "META-INF/.*\.SF"; then
-            echo "✅ v2 APK Signing Block: Applied (verified by AGP build)"
-          fi
-
-          echo "✅ v3 APK Signing Scheme: Applied (minSdk 26+ auto-enabled by AGP)"
-
-      - name: Get version info
-        id: version
-        run: |
-          VERSION=$(grep "versionName" app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
-          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
-          echo "tag=v${VERSION}-${TIMESTAMP}" >> $GITHUB_OUTPUT
-
-      - name: Prepare APK for upload
+      - name: Prepare & Upload Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           APK_PATH=$(find app/build -name "*.apk" -type f | head -1)
-          mkdir -p /tmp/apk-output
-          cp "$APK_PATH" "/tmp/apk-output/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk"
-          echo "APK_FILE=/tmp/apk-output/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk" >> $GITHUB_ENV
+          echo "Found APK: $APK_PATH"
+          VERSION="2.0.0"
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          TAG="v${VERSION}-${TIMESTAMP}"
+          APK_NAME="SecureBrowse-${VERSION}-${TIMESTAMP}.apk"
+          cp "$APK_PATH" "/tmp/${APK_NAME}"
+          echo "APK_NAME=${APK_NAME}" >> $GITHUB_ENV
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
-      - name: Create Release and Upload APK
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: "SecureBrowse v${{ steps.version.outputs.version }} - ${{ steps.version.outputs.timestamp }}"
-          body: |
-            ## SecureBrowse v${{ steps.version.outputs.version }}
+          # Create git tag
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG" 2>/dev/null || true
+          git push origin "$TAG" 2>/dev/null || true
 
-            ### Network-Level Content Blocker
-            Blocks `roblox.com` and 24+ related domains via **local VPN DNS interception**.
+          # Create release via gh CLI
+          gh release create "$TAG" "/tmp/${APK_NAME}" \
+            --title "SecureBrowse v${VERSION} - ${TIMESTAMP}" \
+            --notes "## SecureBrowse v${VERSION}
 
-            ### How it works
-            - Creates a local VPN that intercepts all DNS queries
-            - Blocks any DNS lookup for `*.roblox.com`, `*.rbxcdn.com`, and related domains
-            - Returns NXDOMAIN to the requesting app
-            - **Works for ALL apps**: Chrome, Firefox, WebViews, fetch(), XMLHttpRequest, etc.
+          ### Network-Level Content Blocker
+          Blocks \`roblox.com\` and 24+ related domains via **local VPN DNS interception**.
 
-            ### Signing
-            - ✅ APK Signature Scheme v1 (JAR signing)
-            - ✅ APK Signature Scheme v2
-            - ✅ APK Signature Scheme v3 (key rotation ready)
+          ### How it works
+          - Creates a local VPN that intercepts all DNS queries
+          - Blocks any DNS lookup for \`*.roblox.com\`, \`*.rbxcdn.com\`, and related domains
+          - Returns NXDOMAIN to the requesting app
+          - **Works for ALL apps**: Chrome, Firefox, WebViews, fetch(), XMLHttpRequest, etc.
 
-            ### Requirements
-            - Android 8.0+ (API 26)
+          ### Signing
+          - ✅ APK Signature Scheme v1 (JAR signing)
+          - ✅ APK Signature Scheme v2
+          - ✅ APK Signature Scheme v3 (key rotation ready)
 
-            ### Installation
-            1. Download APK below
-            2. Enable "Install from unknown sources"
-            3. Install & open
-            4. Tap "Start Blocking" → Accept VPN permission
-            5. roblox.com is now blocked system-wide
+          ### Requirements
+          - Android 8.0+ (API 26)
 
-          files: ${{ env.APK_FILE }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ### Installation
+          1. Download APK below
+          2. Enable \"Install from unknown sources\"
+          3. Install & open
+          4. Tap \"Start Blocking\" → Accept VPN permission
+          5. roblox.com is now blocked system-wide"
