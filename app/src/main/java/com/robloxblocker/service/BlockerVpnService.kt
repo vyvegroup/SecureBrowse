@@ -249,7 +249,7 @@ class BlockerVpnService : VpnService() {
 
         // Set QR flag to 1 (response) and RCODE to NXDOMAIN (3)
         response[2] = (response[2].toInt() or 0x80).toByte()  // QR = 1
-        response[3] = (response[3].toInt() and 0xF0) or 0x03  // RCODE = NXDOMAIN
+        response[3] = ((response[3].toInt() and 0xF0) or 0x03).toByte()  // RCODE = NXDOMAIN
 
         // Clear ANCOUNT
         response[6] = 0

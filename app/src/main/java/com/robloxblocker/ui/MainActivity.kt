@@ -168,30 +168,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun runEntranceAnimations() {
+        data class AnimEntry(val viewId: Int, val fromY: Float, val toY: Float)
+
         val views = listOf(
-            R.id.glow_orb_top to 0f to 0.5f,
-            R.id.glow_orb_bottom to 0f to 0.4f,
-            R.id.icon_container to -30f to 0f,
-            R.id.status_dot to -20f to 0f,
-            R.id.tv_status_text to -20f to 0f,
-            R.id.glass_card to 40f to 0f,
-            R.id.card_info to 30f to 0f,
-            R.id.btn_toggle to 20f to 0f,
-            R.id.tv_footer to 10f to 0f,
+            AnimEntry(R.id.glow_orb_top, 0f, 0f),
+            AnimEntry(R.id.glow_orb_bottom, 0f, 0f),
+            AnimEntry(R.id.icon_container, -30f, 0f),
+            AnimEntry(R.id.status_dot, -20f, 0f),
+            AnimEntry(R.id.tv_status_text, -20f, 0f),
+            AnimEntry(R.id.glass_card, 40f, 0f),
+            AnimEntry(R.id.card_info, 30f, 0f),
+            AnimEntry(R.id.btn_toggle, 20f, 0f),
+            AnimEntry(R.id.tv_footer, 10f, 0f),
         )
 
-        views.forEachIndexed { index, (id, pair) ->
-            val (_, toY) = pair
-            val fromY = (pair as Pair<Float, Float>).first
-            val view = findViewById<View>(id)
+        views.forEachIndexed { index, entry ->
+            val view = findViewById<View>(entry.viewId)
             view.alpha = 0f
-            view.translationY = fromY
+            view.translationY = entry.fromY
             view.animate()
                 .alpha(1f)
-                .translationY(toY)
+                .translationY(entry.toY)
                 .setDuration(500 + index.toLong() * 80)
                 .setStartDelay(100L + index * 120L)
-                .setInterpolator(if (id == R.id.glass_card || id == R.id.card_info)
+                .setInterpolator(if (entry.viewId == R.id.glass_card || entry.viewId == R.id.card_info)
                     DecelerateInterpolator(1.8f) else AnticipateInterpolator(1.2f))
                 .start()
         }
