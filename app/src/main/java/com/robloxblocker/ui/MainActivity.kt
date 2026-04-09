@@ -1,6 +1,5 @@
 package com.robloxblocker.ui
 
-import android.content.Context
 import android.content.Intent
 import android.net.VpnService
 import android.os.Build
@@ -16,8 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.robloxblocker.R
 import com.robloxblocker.service.BlockerNotification
@@ -183,7 +180,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         views.forEachIndexed { index, entry ->
-            val view = findViewById<View>(entry.viewId)
+            val view = findViewById<View>(entry.viewId) ?: return@forEachIndexed
             view.alpha = 0f
             view.translationY = entry.fromY
             view.animate()

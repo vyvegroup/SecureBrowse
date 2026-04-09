@@ -62,12 +62,12 @@ object BlockerNotification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText("$subtitle — $blockedCount blocked")
-            .setSmallIcon(R.drawable.ic_shield_lock)
+            .setSmallIcon(R.drawable.ic_notification_silhouette)
             .setOngoing(true)
             .setSilent(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_shield_lock, "Stop", stopPendingIntent)
+            .addAction(R.drawable.ic_notification_silhouette, "Stop", stopPendingIntent)
             .build()
     }
 
@@ -86,7 +86,7 @@ object BlockerNotification {
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("SecureBrowse Stopped")
             .setContentText("Content blocking is disabled")
-            .setSmallIcon(R.drawable.ic_shield_lock)
+            .setSmallIcon(R.drawable.ic_notification_silhouette)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()

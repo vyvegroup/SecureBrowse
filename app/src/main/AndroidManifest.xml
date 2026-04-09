@@ -15,8 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RobloxBlocker"
-        android:usesCleartextTraffic="false"
-        android:persistent="true">
+        android:usesCleartextTraffic="false">
+
+        <!-- Android 14+: Required property for specialUse foreground service -->
+        <property
+            android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+            android:value="DNS-based content filtering VPN service" />
 
         <!-- Main Activity -->
         <activity
@@ -31,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        <!-- VPN Service - blocks roblox.com at network level -->
+        <!-- VPN Service -->
         <service
             android:name=".service.BlockerVpnService"
             android:exported="false"
@@ -42,15 +46,14 @@
             </intent-filter>
         </service>
 
-        <!-- Boot receiver - auto-start after reboot -->
+        <!-- Boot receiver -->
         <receiver
             android:name=".receiver.BootReceiver"
-            android:exported="false"
+            android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 

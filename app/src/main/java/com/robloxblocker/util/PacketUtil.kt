@@ -86,6 +86,23 @@ object PacketUtil {
     }
 
     /**
+     * Calculate IP header checksum for the first `headerLength` bytes.
+     * The checksum field itself (bytes 10-11) must be zeroed before calling.
+     */
+    fun calculateIpChecksum(data: ByteArray, headerLength: Int): Int {
+        var sum = 0
+        for (i in 0 until headerLength step 2) {
+            val high = (data[i].toInt() and 0xFF) shl 8
+            val low = if (i + 1 < headerLength) (data[i + 1].toInt() and 0xFF) else 0
+            sum += high or low
+        }
+        while (sum shr 16 > 0) {
+            sum = (sum and 0xFFFF) + (sum shr 16)
+        }
+        return sum.inv() and 0xFFFF
+    }
+
+    /**
      * Calculate IP header checksum.
      */
     private fun calculateChecksum(header: ByteArray): Int {
