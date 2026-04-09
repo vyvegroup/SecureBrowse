@@ -27,7 +27,11 @@ jobs:
 
       - name: Generate Gradle Wrapper
         run: |
-          gradle wrapper --gradle-version 8.5
+          # Download gradle-wrapper.jar if not present
+          mkdir -p gradle/wrapper
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            curl -sL "https://raw.githubusercontent.com/nicoulaj/gradle-wrapper/refs/heads/master/gradle-wrapper.jar" -o gradle/wrapper/gradle-wrapper.jar
+          fi
           chmod +x gradlew
 
       - name: Generate Signing Keystore
