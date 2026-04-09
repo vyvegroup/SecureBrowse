@@ -10,9 +10,5 @@
 local.properties
 *.apk
 *.ap_
-*.dex
-*.class
-gen/
-bin/
-out/
-.navigation/
+*.jks
+*.keystore

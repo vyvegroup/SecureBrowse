@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "RobloxBlocker"
+rootProject.name = "SecureBrowse"
 include(":app")

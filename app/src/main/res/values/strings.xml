@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SecureBrowse</string>
-    <string name="restricted_title">Access Restricted</string>
-    <string name="restricted_subtitle">This content is not available in your region</string>
-    <string name="restricted_code">ERROR 451</string>
-    <string name="restricted_description">The requested content has been restricted due to compliance with local regulations and content safety policies. This domain has been classified under restricted content categories.</string>
-    <string name="restricted_policy">Content Safety Policy</string>
-    <string name="restricted_details">Learn more about content restrictions</string>
-    <string name="button_go_back">Go Back</string>
-    <string name="button_report">Report Issue</string>
-    <string name="footer_text">Protected by SecureBrowse v1.0</string>
-    <string name="domain_label">Restricted Domain</string>
-    <string name="category_label">Content Category</string>
-    <string name="category_value">Gaming Platform — Restricted</string>
-    <string name="timestamp_label">Restriction Applied</string>
-    <string name="reference_id">Reference ID</string>
 </resources>
