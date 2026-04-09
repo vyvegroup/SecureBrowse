@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer subtle glow border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0AFFFFFF" />
+            <corners android:radius="28dp" />
+            <stroke
+                android:width="1dp"
+                android:color="#1AFFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Main glass body -->
+    <item
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="135"
+                android:endColor="#0D141420"
+                android:startColor="#1A1E2838"
+                android:type="linear" />
+            <corners android:radius="27dp" />
+        </shape>
+    </item>
+
+    <!-- Top highlight reflection -->
+    <item
+        android:bottom="120dp"
+        android:left="20dp"
+        android:right="20dp"
+        android:top="4dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="90"
+                android:endColor="#00000000"
+                android:startColor="#15FFFFFF"
+                android:type="linear" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+
+    <!-- Diagonal light streak -->
+    <item
+        android:bottom="80dp"
+        android:left="40dp"
+        android:right="-60dp"
+        android:top="-20dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="45"
+                android:centerColor="#0FFFFFFF"
+                android:endColor="#00000000"
+                android:startColor="#00000000"
+                android:type="linear" />
+        </shape>
+    </item>
+
+</layer-list>

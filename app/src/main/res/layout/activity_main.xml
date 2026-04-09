@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:fitsSystemWindows="false">
+
+    <!-- Animated background glow orbs -->
+    <View
+        android:id="@+id/glow_orb_top"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="-80dp"
+        android:layout_marginEnd="-60dp"
+        android:background="@drawable/bg_glow_orb"
+        android:alpha="0.5" />
+
+    <View
+        android:id="@+id/glow_orb_bottom"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginBottom="-100dp"
+        android:layout_marginStart="-80dp"
+        android:background="@drawable/bg_glow_blue"
+        android:alpha="0.4" />
+
+    <!-- Main Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="60dp"
+            android:paddingBottom="40dp">
+
+            <!-- Shield Icon with Glow -->
+            <FrameLayout
+                android:id="@+id/icon_container"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="32dp">
+
+                <!-- Glow ring -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_icon_glow" />
+
+                <!-- Inner circle -->
+                <View
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_shield_circle" />
+
+                <!-- Shield icon -->
+                <ImageView
+                    android:id="@+id/shield_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_shield_lock"
+                    android:contentDescription="Restricted"
+                    app:tint="#FFFFFF" />
+
+            </FrameLayout>
+
+            <!-- Error Code Badge -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/error_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/restricted_code"
+                android:textColor="#FF3B30"
+                android:fontFamily="monospace"
+                android:textSize="12sp"
+                android:letterSpacing="0.15"
+                app:chipBackgroundColor="#15FF3B30"
+                app:chipStrokeColor="#33FF3B30"
+                app:chipStrokeWidth="1dp"
+                app:chipCornerRadius="18dp"
+                app:chipMinHeight="36dp" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/restricted_title"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:letterSpacing="-0.01" />
+
+            <!-- Subtitle -->
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/restricted_subtitle"
+                android:textColor="@color/text_secondary"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.4" />
+
+            <!-- Glass Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/glass_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="0dp"
+                android:foreground="@drawable/bg_glass_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <!-- Top shine effect -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/bg_shine_top" />
+
+                    <!-- Domain info -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/domain_label"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.1"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="monospace"
+                        android:text="roblox.com"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:letterSpacing="0.02" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_info_row" />
+
+                    <!-- Category -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/category_label"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.1"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/category_value"
+                        android:textColor="@color/restricted_orange"
+                        android:textSize="14sp" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_info_row" />
+
+                    <!-- Reference ID -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/reference_id"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.1"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/tv_ref_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+
+                    <!-- Description -->
+                    <TextView
+                        android:id="@+id/tv_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/restricted_description"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13.5sp"
+                        android:gravity="start"
+                        android:lineSpacingMultiplier="1.6" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:id="@+id/buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="40dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_go_back"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_button_glass"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/button_go_back"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:letterSpacing="0"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="14dp"
+                    app:rippleColor="#15FFFFFF"
+                    app:strokeColor="#20FFFFFF"
+                    app:strokeWidth="1dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_report"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_button_glass"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/button_report"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:letterSpacing="0"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="14dp"
+                    app:rippleColor="#15FFFFFF"
+                    app:strokeColor="#15FFFFFF"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+
+            <!-- Policy Links -->
+            <LinearLayout
+                android:id="@+id/policy_links"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/restricted_policy"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="·"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/restricted_details"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- Footer -->
+            <TextView
+                android:id="@+id/tv_footer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/footer_text"
+                android:textColor="@color/text_tertiary"
+                android:textSize="11sp"
+                android:alpha="0.6" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- WebView (hidden by default, behind restriction overlay) -->
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

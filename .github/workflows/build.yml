@@ -1,0 +1,83 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle.kts', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Get version info
+        id: version
+        run: |
+          VERSION=$(grep "versionName" app/build.gradle.kts | sed 's/.*"\(.*\)".*/\1/')
+          CODE=$(grep "versionCode" app/build.gradle.kts | sed 's/.*\([0-9]\+\).*/\1/')
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "code=$CODE" >> $GITHUB_OUTPUT
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+          echo "tag=v${VERSION}-${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Rename APK
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk \
+            app/build/outputs/apk/release/SecureBrowse-${{ steps.version.outputs.version }}-${{ steps.version.outputs.timestamp }}.apk
+
+      - name: Create Release and Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "SecureBrowse v${{ steps.version.outputs.version }} - ${{ steps.version.outputs.timestamp }}"
+          body: |
+            ## SecureBrowse Android App
+            **Version:** ${{ steps.version.outputs.version }}
+            **Build:** ${{ steps.version.outputs.timestamp }}
+
+            ### Features
+            - Material 3+ Design
+            - Glassmorphism UI with gradient effects
+            - Content restriction enforcement
+            - Android 8.0+ (API 26+) support
+
+            ### Installation
+            1. Download the APK file below
+            2. Enable "Install from unknown sources" on your device
+            3. Install the APK
+
+          files: |
+            app/build/outputs/apk/release/SecureBrowse-*.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

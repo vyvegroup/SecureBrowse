@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core Dark Monochromatic Palette -->
+    <color name="black">#000000</color>
+    <color name="dark_surface_900">#0A0A0C</color>
+    <color name="dark_surface_800">#111114</color>
+    <color name="dark_surface_700">#1A1A1F</color>
+    <color name="dark_surface_600">#242429</color>
+    <color name="dark_surface_500">#2E2E35</color>
+    <color name="dark_surface_400">#3A3A43</color>
+    <color name="dark_surface_300">#4A4A55</color>
+
+    <!-- Accent Gradients (subtle cool tones) -->
+    <color name="accent_cool_100">#E8EDF2</color>
+    <color name="accent_cool_200">#C4CEDB</color>
+    <color name="accent_cool_300">#9EABC0</color>
+    <color name="accent_cool_400">#7888A5</color>
+    <color name="accent_cool_500">#5C6E8C</color>
+    <color name="accent_cool_600">#3D4F6A</color>
+
+    <!-- Glass Effect Colors -->
+    <color name="glass_bg">#1AFFFFFF</color>
+    <color name="glass_border">#33FFFFFF</color>
+    <color name="glass_highlight">#0DFFFFFF</color>
+    <color name="glass_shadow">#66000000</color>
+
+    <!-- Status Colors -->
+    <color name="restricted_red">#FF3B30</color>
+    <color name="restricted_red_dim">#4DFF3B30</color>
+    <color name="restricted_orange">#FF9500</color>
+
+    <!-- Text Hierarchy -->
+    <color name="text_primary">#F5F5F7</color>
+    <color name="text_secondary">#98989D</color>
+    <color name="text_tertiary">#636366</color>
+
+    <!-- Gradient Stops -->
+    <color name="gradient_start">#0D0D10</color>
+    <color name="gradient_mid">#16161A</color>
+    <color name="gradient_end">#1E1E24</color>
+
+    <!-- Glow Effects -->
+    <color name="glow_red">#1AFF3B30</color>
+    <color name="glow_blue">#1A5856D6</color>
+</resources>
